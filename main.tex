@@ -109,13 +109,40 @@ measuring distance between subjects and compare it to the regulation.
 
 Both phases involve the web application, which is the main focus of this paper.
 The web application is responsible to receive the data from the server,
-make predictions, and finally visualize it. The web application consists of 
-three parts. The backend, database, and frontend.
+make predictions, and finally visualize it. 
 
-\section{Web Application}
+\subsection{Web Application}
 
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.49\textwidth]{full_stack_implementation_fix}}
+\caption{Web application software design}
+\label{fig:full_stack_implementation_fix}
+\end{figure}
 
+Fig.\ref{fig:full_stack_implementation_fix} shows the software of design of the 
+web application. The web application consists of three parts, backend, database
+, and frontend. 
 
+\subsubsection{Backend}
+In backend, NodeJS with Express is used as the web server. Express is responsible
+to receive all requests addressed to the API. To ease the interaction between
+backend and all other interface, GraphQL is used instead of REST API. With 
+GraphQL, interface that is making request to backend can and will only 
+receive data that is being requested, hence the payload will be smaller.  
+
+To interact with MongoDB (as database), a library called \textit{mongoose} is used. 
+With \textit{mongoose}, development process is relatively easier since the code 
+itself does not need to be written in its commands. The explanation of
+why MongoDB is used will be explained later.
+
+Lastly, backend also responsible to make estimated location prediction 
+using the provided trained model \cite{Afif}. Since the provided model is previously 
+written with Tensorflow, the backend will also use Tensorflow to apply the model.
+Tensorflow provides library specifically for Javascript/Typescript, which is 
+Tensorflow.js.
+
+\subsubsection{Database}
+Datababse is responsible to store all kind of necessary data.
 
 
 \section{Prepare Your Paper Before Styling}
