@@ -7,6 +7,44 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage[numbers]{natbib}
+\usepackage{listings}
+
+\usepackage{color}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{
+   language=JavaScript,
+   backgroundcolor=\color{white},
+   numbers=right,
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b,
+}
+
+
 \graphicspath{{images/}}
 \bibliographystyle{IEEEtran}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -114,9 +152,9 @@ make predictions, and finally visualize it.
 \subsection{Web Application}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.49\textwidth]{full_stack_implementation_fix}}
-\caption{Web application software design}
-\label{fig:full_stack_implementation_fix}
+    \centerline{\includegraphics[width=0.49\textwidth]{full_stack_implementation_fix}}
+    \caption{Web application software design}
+    \label{fig:full_stack_implementation_fix}
 \end{figure}
 
 Fig.\ref{fig:full_stack_implementation_fix} shows the software of design of the 
@@ -142,8 +180,88 @@ Tensorflow provides library specifically for Javascript/Typescript, which is
 Tensorflow.js.
 
 \subsubsection{Database}
-Datababse is responsible to store all kind of necessary data.
+Database is responsible to store all kind of necessary data. A NoSQL database,
+specifically MongoDB, is chosen because the system may have to scale in 
+terms of its properties. For instance, if the room is bigger, number of 
+receivers and/or transmitters will increase. Hence, the property for 
+receivers and/or transmitters will change as well. Another reason 
+why MongoDB is chosen is because its ease of use and availability accross
+platform, in case the application will be scaled through cloud platform 
+or just different computers in a network.
 
+In MongoDB, a so-called \emph{Schema} has to be defined for each entity.
+This Schema defines properties each entity contain, its type, and its 
+requirement within the database. Furthermore, a method can be assigned 
+to each entity if necessary. 
+
+\begin{figure}[htbp]
+    \lstinputlisting[language=Javascript, linewidth=0.49\textwidth, frame=single, linerange={1-, 4-22}]{source code/Receiver.ts}
+    \caption{Code that defines \emph{Receiver} Schema}
+    \label{fig:receiver_schema_sc}
+\end{figure}
+
+Fig.\ref{fig:receiver_schema_sc} shows how a Schema constructed for an entity,
+specifically the \emph{Receiver}. A Schema for \emph{Receiver} is described
+at lines 3-20. A \emph{Receiver} Schema has three main 
+properties, \emph{createdAt}, \emph{receiverUUID}, and \emph{rssis}.
+Three of them are required, hence they cannot be \emph{null} object and
+have three different types, \emph{Date}, \emph{String}, \emph{Number} which 
+are self-explanatory.
+
+To fulfill system's requirement, there are three additional entities,
+namely \emph{System}, \emph{Transmitter}, and \emph{EstimatedPosition}.
+Since they are not related by design (and NoSQL databases are non-relational),
+the process of making these entities are similar as in Fig.\ref{fig:receiver_schema_sc}.
+
+\subsubsection{Frontend}
+
+Frontend is accountable to visualize the data in a way such that the visualization
+will represent Social Distancing violation. This part of the web application
+is built with \emph{NextJS}, a frontend development framework that run on top of 
+\emph{ReactJS}. On top of that, a library called \emph{D3.js} is used
+to make visualization a lot easier, since drawing with SVG is not a simple
+process.
+
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=0.49\textwidth]{frontend_vis_1}}
+    \caption{Visualization main page}
+    \label{fig:frontend_vis_1}
+\end{figure}
+
+Fig.\ref{fig:frontend_vis_1} shows the main page of the visualization.
+In the page, a room is represented by an area of rectangle. The rectangle
+area is further segmented into smaller areas. In other hand, each circle
+represent the subject (carrying BLE device) as its center point of the circle,
+and the radius represents a half of permitted distance according to 
+Social Distancing guideline + error produced by the Machine Learning model.
+
+
+At first, an area is pale white colored and the circle is green colored.
+Less red the color, the less number of violations at the certain area
+or by the subject. Fig.\ref{fig:frontend_vis_2} shows how the color change
+as the violation is happening, and Fig.\ref{fig:frontend_vis_3} shows
+color changes after the violation takes place. 
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=0.45\textwidth]{frontend_vis_2}}
+    \caption{Visualization main page}
+    \label{fig:frontend_vis_2}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=0.45\textwidth]{frontend_vis_3}}
+    \caption{Visualization main page}
+    \label{fig:frontend_vis_3}
+\end{figure}
+
+
+\section{Result}
+
+
+% \emph{createdAt}, describes when the Schema is made, \emph{receiverUUID} 
+% describes the ID of the \emph{Receiver} and \emph{rssis} describes the 
+% received signals strength from each \emph{Transmitter}.
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
